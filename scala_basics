@@ -1,0 +1,74 @@
+object Rextester extends App {
+
+//traits
+
+ trait Car {
+  val brand: String
+}
+
+trait Shiny {
+  val shineRefraction: Int
+  
+}
+
+class BMW extends Car with Shiny {
+  val brand = "BMW"
+  val shineRefraction = 12
+}
+
+
+//Matches
+    
+    val times = 1
+
+    println(times match {
+      case 1 => "one"
+      case 2 => "two"
+      case _ => "some other number"
+    })
+    
+    val bmwobj = new BMW
+    println(bmwobj.brand)
+    println(bmwobj.shineRefraction)
+    
+    def bigger(o: Any): Any = {
+    o match {
+    case i: Int if i < 0 => i - 1
+    case i: Int => i + 1
+    case d: Double if d < 0.0 => d - 0.1
+    case d: Double => d + 0.1
+    case text: String => text + "s"
+    }
+    
+    
+      
+      }
+      println(bigger(1.1))
+        
+      case class Calculator(brand: String, model: String)
+      val hp20b = Calculator("HP", "20b")
+      println(hp20b.brand+"  "+hp20b.model)
+      
+      //Maps
+      
+      //val numbers = Set(1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
+      println(1->2)
+      val map1 = Map(1 -> Map("foo" -> "bar","goo" -> "car"))
+      println(map1.get(1))
+      
+      
+      val numbers = Map("one" -> 1, "two" -> 2)
+      println(numbers.get("one")) //Option example some[] type
+      println(numbers.get("three")) //Option example None type
+      
+      
+      
+      val numbers1 = List(1, 2, 3, 4)
+      
+      numbers1.map((i: Int) => i * 2)
+      
+      def timesTwo(i: Int): Int = i * 2
+      numbers1.map(timesTwo)
+      
+    
+ }
