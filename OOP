@@ -1,0 +1,259 @@
+Scala singleton object(Can be easily accessed witout creating a object, object is a class with one instance)
+
+Ex- 
+package logging
+object Logger{
+def info(message:String):Unit=println("Info: "+message)
+}
+Now consider another package:
+import logging.Logger.info
+class Project(name:String,days:Int)
+class Test{
+val project1=new Project("Book writing",365)
+val project2=new Project("Revision",30)
+info("Planned")
+}
+
+
+scala> object SingletonObject{
+| def greet(){
+| println("Hello")
+| }
+| }
+defined object SingletonObject
+scala> SingletonObject.greet()
+
+
+
+Companion Object--
+---------------------
+
+Coming from Scala singleton objects, we now discuss companion objects. 
+A Scala companion object is an object with the same name as a class. 
+We can call it the object’s companion class. 
+The companion class-object pair is to be in a single source file. 
+Either member of the pair can access its companion’s private members.
+
+
+scala> class CompanionClass{
+| def greet(){
+| println("Hello")
+| }
+| }
+defined class CompanionClass
+scala> object CompanionObject{
+| def main(args:Array[String]){
+| new CompanionClass().greet()
+| println("Companion object")
+| }
+| }
+defined object CompanionObject
+
+
+
+
+Case Class-
+-----------
+To create scala object of case class we don't need a new keyword for definition
+
+Method overloading --
+---------------------
+
+scala> class Calculator{
+     | def sum(a:Int,b:Int){
+     | var sum=a+b
+     | println(sum)
+     | }
+     | def sum(a:Double,b:Double){
+     | var sum=a+b
+     | println(sum)
+     | }
+     | }
+defined class Calculator
+scala> var c=new Calculator()
+c: Calculator = Calculator@1d3e5a05
+scala> c.sum(1,2)
+
+scala> class Calculator{
+     | def sum(a:Int,b:Int){
+     | var sum=a+b
+     | println(sum)
+     | }
+     | def sum(a:Double,b:Double){
+     | var sum=a+b
+     | println(sum)
+     | }
+     | }
+defined class Calculator
+scala> var c=new Calculator()
+c: Calculator = Calculator@1d3e5a05
+scala> c.sum(1,2)
+
+
+Overriding-(we use the ‘override’ modifier to implement this)
+-----------
+Technically, Scala method overriding is when a member M of class C matches 
+a non-private member M’ of a class from which C inherits. There are some restrictions:
+
+M is not privatecla
+M’ is not final
+
+scala> class Person{
+| def greet(){
+| println("I'm a person")
+| }
+| }
+defined class Person
+scala> class Student extends Person{
+| override def greet(){
+| println("I'm a student")
+| }
+| }
+defined class Student
+scala> var s=new Student()
+s: Student = Student@6f1d799
+scala> s.greet()
+
+Ex2-
+----
+
+scala> class Vehicle{
+| val wheels=0
+| }
+defined class Vehicle
+scala> class Car extends Vehicle{
+| override val wheels=4
+| def show(){
+| println("The car has "+wheels+" wheels")
+| }
+| }
+defined class Car
+scala> var c=new Car()
+c: Car = Car@6d512521
+scala> c.show()
+
+****************
+You can only override val fields; this won’t work with vars. 
+This is because we can only read vals, but we can both read and write vars. Let’s take an example.
+*****************
+
+scala> class Vehicle{
+| var wheels=0
+| }
+defined class Vehicle
+scala> class Car extends Vehicle{
+| override var wheels=4
+| def show(){
+| println("The car has "+wheels+" wheels")
+| }
+| }
+<console>:13: error: overriding variable wheels in class Vehicle of type Int;
+variable wheels cannot override a mutable variable
+override var wheels=4
+^
+
+ex2-
+
+scala> class Vehicle{
+| val wheels=0
+| }
+defined class Vehicle
+scala> class Car extends Vehicle{
+| override var wheels=4
+| def show(){
+| println("The car has "+wheels+" wheels")
+| }
+| }
+<console>:13: error: overriding value wheels in class Vehicle of type Int;
+variable wheels needs to be a stable, immutable value
+override var wheels=4
+^
+
+Scala Abstract Class
+---------------------
+
+scala> abstract class Person{
+| def greet()
+| }
+defined class Person
+scala> class Student extends Person{
+| def greet(){
+| println("Hi")
+| }
+| }
+defined class Student
+scala> var s=new Student()
+s: Student = Student@3ceeb6ba
+scala> s.greet()
+
+Ex2---
+------
+scala> abstract class Person{
+| def greet()
+| def greethello()
+| }
+defined class Person
+scala> abstract class Student extends Person{
+| def greet(){
+| println("Hi")
+| }
+| def greethello()
+| }
+defined class Student
+
+In this example, we cannot instantiate either of these classes since both are abstract.
+
+scala> abstract class Person(age:Int){
+| var SSN:String=""
+| def greet()
+| def greethello(){
+| println("Hello")
+| }
+| }
+defined class Person
+scala> class Student(age:Int) extends Person(age){
+| SSN="323-44-798"
+| def greet(){
+| println("Hi, I'm a student")
+| println("I am "+age+" years old")
+| println("My social security number is "+SSN)
+| }
+| }
+defined class Student
+scala> var s=new Student(18)
+s: Student = Student@13de62ef
+scala> s.greet()
+scala> s.greethello()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Spark Co group-
+----------------
+
+val myrdd1 = sc.parallelize(List((1,"spark"),(2,"HDFS"),(3,"Hive"),(4,"Flink"),(6,"HBase")))
+val myrdd2 = sc.parallelize(List((4,"RealTime"),(5,"Kafka"),(6,"NOSQL"),(1,"stream"),(1,"MLlib")))
+val result = myrdd1.cogroup(myrdd2)
+result.collect
