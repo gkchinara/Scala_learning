@@ -1,0 +1,14 @@
+++                         aggregate                  asInstanceOf               cache                      cartesian                  checkpoint
+coalesce                   collect                    compute                    context                    count                      countApprox
+countApproxDistinct        countByValue               countByValueApprox         dependencies               distinct                   filter
+filterWith                 first                      flatMap                    flatMapWith                fold                       foreach
+foreachPartition           foreachWith                getCheckpointFile          getNumPartitions           getStorageLevel            glom
+groupBy                    id                         intersection               isCheckpointed             isEmpty                    isInstanceOf
+iterator                   keyBy                      localCheckpoint            map                        mapPartitions              mapPartitionsWithContext
+mapPartitionsWithIndex     mapPartitionsWithSplit     mapWith                    max                        min                        name
+name_=                     partitioner                partitions                 persist                    pipe                       preferredLocations
+randomSplit                reduce                     repartition                sample                     saveAsObjectFile           saveAsTextFile
+setName                    sortBy                     sparkContext               subtract                   take                       takeOrdered
+takeSample                 toArray                    toDebugString              toJavaRDD                  toLocalIterator            toString
+top                        treeAggregate              treeReduce                 union                      unpersist                  zip
+zipPartitions              zipWithIndex               zipWithUniqueId
