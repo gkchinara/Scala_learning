@@ -167,10 +167,75 @@ foreach
 rdd.foreach(println)
 
 
-foreachPartition           foreachWith                getCheckpointFile          getNumPartitions           getStorageLevel            glom
-groupBy                    id                         intersection               isCheckpointed             isEmpty                    isInstanceOf
-iterator                   keyBy                      localCheckpoint            map                        mapPartitions              mapPartitionsWithContext
-mapPartitionsWithIndex     mapPartitionsWithSplit     mapWith                    max                        min                        name
+foreachPartition           foreachWith                getCheckpointFile          
+
+getNumPartitions           
+-----------------
+getNumPartitions()
+Returns the number of partitions of this RDD.
+
+getStorageLevel            
+-----------------
+getStorageLevel()
+Get the RDD's current storage level, or StorageLevel.NONE if none is set.
+lines.getStorageLevel
+
+glom
+----
+Return an RDD created by coalescing all elements within each partition into an array
+
+
+groupBy    
+-----------
+to group the data
+
+id           
+--------------
+id()
+A unique ID for this RDD (within its SparkContext).
+
+intersection               
+-------------
+Return the intersection of this RDD and another one.
+
+isCheckpointed             
+---------------
+Return whether this RDD is checkpointed and materialized, either reliably or locally.
+
+isEmpty                    
+---------------
+Check for if RDD is empty
+
+isInstanceOf
+---------------
+
+
+iterator       
+---------------
+
+
+keyBy                      
+---------------
+localCheckpoint            
+---------------
+map                        
+---------------
+mapPartitions              
+---------------
+mapPartitionsWithContext
+---------------
+mapPartitionsWithIndex     
+------------------------
+mapPartitionsWithSplit     
+-----------------------
+mapWith                    
+---------------
+max                        
+---------------
+min
+---------------
+name
+---------------
 name_=                     partitioner                partitions                 persist                    pipe                       preferredLocations
 randomSplit                reduce                     repartition                sample                     saveAsObjectFile           saveAsTextFile
 setName                    sortBy                     sparkContext               subtract                   take                       takeOrdered
