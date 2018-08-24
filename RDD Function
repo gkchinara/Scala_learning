@@ -1,4 +1,45 @@
-++                         aggregate                  asInstanceOf               cache                      cartesian                  checkpoint
+++ 
+aggregate 
+---------
+
+RDD input = {1,2,3,3}
+
+RDD Aggregate function :
+
+rdd.aggregate((0, 0))
+((x, y) =>
+(x._1 + y, x._2 + 1),
+(x, y) =>
+(x._1 + y._1, x._2 + y._2))
+
+output : {9,4}
+
+
+asInstanceOf
+-------------
+
+// open/read the application context file
+val ctx = new ClassPathXmlApplicationContext("applicationContext.xml")
+
+// instantiate our dog and cat objects from the application context
+val dog = ctx.getBean("dog").asInstanceOf[Animal]
+val cat = ctx.getBean("cat").asInstanceOf[Animal]
+
+cache  
+------
+val textFile = sc.textFile("/user/emp.txt")
+textFile.cache
+
+
+cartesian 
+----------
+
+
+checkpoint
+----------
+
+
+
 coalesce                   collect                    compute                    context                    count                      countApprox
 countApproxDistinct        countByValue               countByValueApprox         dependencies               distinct                   filter
 filterWith                 first                      flatMap                    flatMapWith                fold                       foreach
