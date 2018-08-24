@@ -34,15 +34,139 @@ textFile.cache
 cartesian 
 ----------
 
+val rdd = sc.parallelize(1 to 5)
+val cartesian = rdd.cartesian(rdd)
+cartesian.collect
 
-checkpoint
+Array[(Int, Int)] = Array((1,1), (1,2), (1,3), (1,4), (1,5), 
+(2,1), (2,2), (2,3), (2,4), (2,5), 
+(3,1), (3,2), (3,3), (3,4), (3,5), 
+(4,1), (4,2), (4,3), (4,4), (4,5), 
+(5,1), (5,2), (5,3), (5,4), (5,5))
+
+
+checkpoint(Reliable/Local)
 ----------
+SparkContext.setCheckpointDir(directory: String)
+//he directory must be a HDFS path if running on a cluster. 
+The reason is that the driver may attempt to reconstruct the checkpointed RDD from its own local file system, 
+which is incorrect because the checkpoint files are actually on the executor machines
+
+RDD.checkpoint()
+//You mark an RDD for checkpointing by calling RDD.checkpoint(). 
+The RDD will be saved to a file inside the checkpoint directory and all references to its parent RDDs will be removed. 
+This function has to be called before any job has been executed on this RDD.
+
+localCheckpoint(): this.type
+//localCheckpoint marks a RDD for local checkpointing using Spark’s caching layer.
+//localCheckpoint is for users who wish to truncate RDD lineage graph while skipping the expensive step of replicating the materialized data in a reliable distributed file system. This is useful for RDDs with long lineages that need to be truncated periodically, e.g. GraphX.
+//Local checkpointing trades fault-tolerance for performance.
+
+//There is a significant difference between cache and checkpoint. 
+//Cache materializes the RDD and keeps it in memory (and/or disk). 
+//But the lineage（computing chain）of RDD (that is, seq of operations that generated the RDD) will be remembered, 
+//so that if there are node failures and parts of the cached RDDs are lost, 
+//they can be regenerated. However, checkpoint saves the RDD to an HDFS file and actually forgets the lineage completely. 
+//This allows long lineages to be truncated and the data to be saved reliably in HDFS, which is naturally fault tolerant by replication.
+
+coalesce (only to decrease, to increase try repartition)
+--------
+rdd.coalesce(2)
+
+
+collect
+--------
+rdd.collect
+
+compute??
+-------
 
 
 
-coalesce                   collect                    compute                    context                    count                      countApprox
-countApproxDistinct        countByValue               countByValueApprox         dependencies               distinct                   filter
-filterWith                 first                      flatMap                    flatMapWith                fold                       foreach
+context
+-------
+rdd.Context() returns the SparkContext that this RDD was created on
+
+count
+-----
+rdd.count
+
+countApprox
+------------
+Count() - Returns you the number of elements in an RDD.
+CountApprox - Approximate version of count() that returns a potentially incomplete result within a timeout, even if not all tasks have finished.
+countApprox(timeout: Long, confidence: Double)
+countApprox(long timeout, double confidence)
+Approximate version of count() that returns a potentially incomplete result within a timeout, even if not all tasks have finished
+
+Default: confidence = 0.95
+
+//Note: As per the spark source code, support for countApprox is marked 'Experimental'.
+
+//With timeout=800, you should have seen an approximate count in <1min.
+
+//Are you sure nothing else is causing this slowdown of 30mins. 
+//Share your code/code-snippet to get more accurate inputs from other members.
+
+countApproxDistinct 
+-------------------
+countApproxDistinct(double relativeSD)
+//Return approximate number of distinct elements in the RDD.
+countApproxDistinct(int p, int sp)
+//Return approximate number of distinct elements in the RDD.
+
+countByValue       
+-------------------
+countByValue(scala.math.Ordering<T> ord)
+Return the count of each unique value in this RDD as a local map of (value, count) pairs.
+
+countByValueApprox 
+-------------------
+countByValueApprox(long timeout, double confidence, scala.math.Ordering<T> ord)
+Approximate version of countByValue().
+
+dependencies       
+-------------------
+dependencies()
+Get the list of dependencies of this RDD, taking into account whether the RDD is checkpointed or not.
+
+distinct           
+-------------------        
+distinct()
+Return a new RDD containing the distinct elements in this RDD.
+
+distinct(int numPartitions, scala.math.Ordering<T> ord)
+Return a new RDD containing the distinct elements in this RDD.
+
+filter
+-------------------
+rdd.filter(dt=>dt.split(",")(2)!='Gupt')
+
+filterWith         
+-------------------
+
+first              
+-------------------
+rdd.first
+
+flatMap  
+-------------------
+rdd.flatMap(dt=>dt.split(" "))
+
+flatMapWith        
+-------------------
+filterWith(scala.Function1<java.lang.Object,A> constructA, scala.Function2<T,A,java.lang.Object> p)
+Filters this RDD with p, where p takes an additional parameter of type A.
+
+fold               
+-------------------
+rdd.fold(0)((x, y) => x + y).
+
+foreach
+-------------------
+rdd.foreach(println)
+
+
 foreachPartition           foreachWith                getCheckpointFile          getNumPartitions           getStorageLevel            glom
 groupBy                    id                         intersection               isCheckpointed             isEmpty                    isInstanceOf
 iterator                   keyBy                      localCheckpoint            map                        mapPartitions              mapPartitionsWithContext
@@ -51,5 +175,4 @@ name_=                     partitioner                partitions                
 randomSplit                reduce                     repartition                sample                     saveAsObjectFile           saveAsTextFile
 setName                    sortBy                     sparkContext               subtract                   take                       takeOrdered
 takeSample                 toArray                    toDebugString              toJavaRDD                  toLocalIterator            toString
-top                        treeAggregate              treeReduce                 union                      unpersist                  zip
-zipPartitions              zipWithIndex               zipWithUniqueId
+top                        treeAggregate              treeReduce                 union                      u
